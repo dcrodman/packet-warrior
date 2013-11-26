@@ -1,0 +1,2 @@
+# Change this to the directory where you downloaded (not installed) Boost.
+boost-build ../../../Downloads/boost_1_55_0/tools/build/v2 ;
