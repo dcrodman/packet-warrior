@@ -9,9 +9,10 @@
 #ifndef __PacketWarrior__PacketEngine__
 #define __PacketWarrior__PacketEngine__
 
-#include "Packet.h"
 #include <queue>
 #include "pcap.h"
+
+#include "Packet.h"
 
 class PacketEngine {
 
@@ -19,11 +20,14 @@ public:
     PacketEngine();
     ~PacketEngine();
     
-    char* findAllDevs();
+    const char** getAvailableDevices(char *error_buf);
+    bool selectDevice(const char* dev);
     Packet getNextPacket();
     
 private:
-    char *error_buffer;
+    char *selected_device;
+    char **devices;
+    int num_devices;
     std::queue<Packet> packet_queue;
     
 };
