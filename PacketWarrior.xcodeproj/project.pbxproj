@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		408D0EDF1843EE5F006E13C6 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 408D0EDE1843EE5F006E13C6 /* main.cpp */; };
-		408D0EEF1843EF26006E13C6 /* PacketEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 408D0EED1843EF26006E13C6 /* PacketEngine.cpp */; };
+		408D0EDF1843EE5F006E13C6 /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 408D0EDE1843EE5F006E13C6 /* main.cc */; };
+		408D0EEF1843EF26006E13C6 /* PacketEngine.cc in Sources */ = {isa = PBXBuildFile; fileRef = 408D0EED1843EF26006E13C6 /* PacketEngine.cc */; };
 		409A372D18442D1B00E7B7E8 /* libpcap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 409A372C18442D1B00E7B7E8 /* libpcap.dylib */; };
 /* End PBXBuildFile section */
 
@@ -25,9 +25,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		401F352118453C1400FB2720 /* pcap_ext.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pcap_ext.cc; sourceTree = "<group>"; };
 		408D0EDB1843EE5F006E13C6 /* PacketWarrior */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PacketWarrior; sourceTree = BUILT_PRODUCTS_DIR; };
-		408D0EDE1843EE5F006E13C6 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		408D0EED1843EF26006E13C6 /* PacketEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketEngine.cpp; sourceTree = "<group>"; };
+		408D0EDE1843EE5F006E13C6 /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
+		408D0EED1843EF26006E13C6 /* PacketEngine.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketEngine.cc; sourceTree = "<group>"; };
 		408D0EEE1843EF26006E13C6 /* PacketEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketEngine.h; sourceTree = "<group>"; };
 		408D0EF01843EF85006E13C6 /* Packet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Packet.h; sourceTree = "<group>"; };
 		409A372C18442D1B00E7B7E8 /* libpcap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcap.dylib; path = usr/lib/libpcap.dylib; sourceTree = SDKROOT; };
@@ -65,10 +66,11 @@
 		408D0EDD1843EE5F006E13C6 /* PacketWarrior */ = {
 			isa = PBXGroup;
 			children = (
-				408D0EDE1843EE5F006E13C6 /* main.cpp */,
+				408D0EDE1843EE5F006E13C6 /* main.cc */,
 				408D0EF01843EF85006E13C6 /* Packet.h */,
 				408D0EEE1843EF26006E13C6 /* PacketEngine.h */,
-				408D0EED1843EF26006E13C6 /* PacketEngine.cpp */,
+				408D0EED1843EF26006E13C6 /* PacketEngine.cc */,
+				401F352118453C1400FB2720 /* pcap_ext.cc */,
 			);
 			path = PacketWarrior;
 			sourceTree = "<group>";
@@ -132,8 +134,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				408D0EDF1843EE5F006E13C6 /* main.cpp in Sources */,
-				408D0EEF1843EF26006E13C6 /* PacketEngine.cpp in Sources */,
+				408D0EDF1843EE5F006E13C6 /* main.cc in Sources */,
+				408D0EEF1843EF26006E13C6 /* PacketEngine.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,7 +213,7 @@
 		408D0EE51843EE5F006E13C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"HEADER_SEARCH_PATHS[arch=*]" = "/usr/local/include/wx-3.0";
+				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include/;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/dcrodman/Desktop,
