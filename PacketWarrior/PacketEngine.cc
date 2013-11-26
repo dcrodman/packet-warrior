@@ -27,7 +27,7 @@ const char ** PacketEngine::getAvailableDevices(char *error_buf) {
     if (this->devices == NULL) {
         pcap_if_t *devs;
         char *error_buffer = new char[PCAP_ERRBUF_SIZE];
-        
+
         if (pcap_findalldevs(&devs, error_buffer) == -1) {
             error_buf = error_buffer;
             return NULL;
