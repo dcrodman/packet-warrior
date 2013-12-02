@@ -316,10 +316,6 @@ class PacketWarrior(Frame):
         tkMessageBox.showinfo("Help", "The Help functionality not yet implemented.")
         sys.stdout.flush()
 
-    def pauseCapture(self):
-        print ('pauseCapture')
-        sys.stdout.flush()
-
     def saveFile(self):
         import csv
         w = csv.writer(open("output.csv", "w"))
@@ -339,26 +335,14 @@ class PacketWarrior(Frame):
         sys.stdout.flush()
 
     def setFilters(self):
-        tframe = Tk()
-        tframe.title('Set Filter')
-        filterLabel =Label(tframe, text="Select a filter using the up/down arrowhead keys \nor keyboard up/down arrow keys.\n Replace the value in quotes.")
-        filterLabel.grid(column=0, row=0)
-        self.box_value = StringVar()
-        self.box = ttk.Combobox(tframe, textvariable=self.box_value)
-        self.box['values'] = ('host \'host\'', 'src host host', 'dst host host', 'gateway host', 'dst net net', 'src net net', 
-            'net net', 'dst port port', 'src port port', 'port port', 'ip proto protocol', 'ip6 proto protocol',
-            'ip broadcast', 'ip multicast', 'ip6 multicast')
-        self.box.current(0)
-        #self.box.bind('<Return>', self.updateFilter)
-        self.box.bind('<Return>')
-        print self.box_value
-        self.box.grid(column=0, row=1)
-
-    '''
-    def updateFilter(self, crap):
-        print self.box_value.get()
+        import boxes
+        self.combo = boxes.Application(self)
+        self.combo.box.bind('<Return>', self.updateFilter)
+    
+    def updateFilter(self, other):
+        filterString = self.combo.box_value.get()
+        print filterString.translate(None, '\'')
         sys.stdout.flush()
-    '''
 
     def startCapture(self):
         import tkMessageBox
