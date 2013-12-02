@@ -17,7 +17,6 @@ except ImportError:
     py3 = 1
 from myPackets import MyPacket
 import pTables
-import boxes
 
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
@@ -232,13 +231,6 @@ class PacketWarrior(Frame):
                 activebackground="systemWindowBody",
                 activeforeground="#000000",
                 background="systemWindowBody",
-                command=self.pauseCapture,
-                foreground="#000000",
-                label="Pause Capture")
-        self.capture.add_command(
-                activebackground="systemWindowBody",
-                activeforeground="#000000",
-                background="systemWindowBody",
                 command=self.stopCapture,
                 foreground="#000000",
                 label="stopCapture")
@@ -270,24 +262,20 @@ class PacketWarrior(Frame):
         self.StartButton = Button(master, image=self._img6, command=self.startCapture, bd=-2)
         self.StartButton.grid(row=0, column=5)
 
-        self._img7 = PhotoImage(file="img/pause.gif")
-        self.PauseButton = Button(master, image=self._img7 , command=self.pauseCapture, bd=-2)
-        self.PauseButton.grid(row=0, column=6)
-
         self._img8 = PhotoImage(file="img/stop.gif")
         self.StopButton = Button(master, image=self._img8, command=self.stopCapture, bd=-2)
-        self.StopButton.grid(row=0, column=7)
+        self.StopButton.grid(row=0, column=6)
 
         self._img9 = PhotoImage(file="img/help.gif")
         self.HelpButton = Button(master, image=self._img9, command=self.openHelp, bd=-2)
-        self.HelpButton.grid(row=0, column=8)
+        self.HelpButton.grid(row=0, column=7)
 
         self._img10 = PhotoImage(file="img/exit.gif")
         self.ExitButton = Button(master, image=self._img10, command=self.exitPW, bd=-2)
-        self.ExitButton.grid(row=0, column=9)
+        self.ExitButton.grid(row=0, column=8)
 
         self.PktLstButton = Button(master, command=self.showPacketList, bd=-2, text="PacketList")
-        self.PktLstButton.grid(row=0, column=10)
+        self.PktLstButton.grid(row=0, column=9)
 
         # End Toolbar
 
@@ -361,13 +349,16 @@ class PacketWarrior(Frame):
             'net net', 'dst port port', 'src port port', 'port port', 'ip proto protocol', 'ip6 proto protocol',
             'ip broadcast', 'ip multicast', 'ip6 multicast')
         self.box.current(0)
-        self.box.bind('<Return>', self.updateFilter)
+        #self.box.bind('<Return>', self.updateFilter)
+        self.box.bind('<Return>')
+        print self.box_value
         self.box.grid(column=0, row=1)
 
+    '''
     def updateFilter(self, crap):
         print self.box_value.get()
         sys.stdout.flush()
-
+    '''
 
     def startCapture(self):
         import tkMessageBox
