@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		408138EA184FA3E100AD8740 /* Packet.cc in Sources */ = {isa = PBXBuildFile; fileRef = 408138E9184FA3E100AD8740 /* Packet.cc */; };
 		408D0EDF1843EE5F006E13C6 /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 408D0EDE1843EE5F006E13C6 /* main.cc */; };
 		408D0EEF1843EF26006E13C6 /* PacketEngine.cc in Sources */ = {isa = PBXBuildFile; fileRef = 408D0EED1843EF26006E13C6 /* PacketEngine.cc */; };
 		409A372D18442D1B00E7B7E8 /* libpcap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 409A372C18442D1B00E7B7E8 /* libpcap.dylib */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		401F352118453C1400FB2720 /* pcap_ext.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pcap_ext.cc; sourceTree = "<group>"; };
+		408138E9184FA3E100AD8740 /* Packet.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Packet.cc; sourceTree = "<group>"; };
 		408D0EDB1843EE5F006E13C6 /* PacketWarrior */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PacketWarrior; sourceTree = BUILT_PRODUCTS_DIR; };
 		408D0EDE1843EE5F006E13C6 /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		408D0EED1843EF26006E13C6 /* PacketEngine.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketEngine.cc; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 			children = (
 				408D0EDE1843EE5F006E13C6 /* main.cc */,
 				408D0EF01843EF85006E13C6 /* Packet.h */,
+				408138E9184FA3E100AD8740 /* Packet.cc */,
 				408D0EEE1843EF26006E13C6 /* PacketEngine.h */,
 				408D0EED1843EF26006E13C6 /* PacketEngine.cc */,
 				401F352118453C1400FB2720 /* pcap_ext.cc */,
@@ -134,6 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				408138EA184FA3E100AD8740 /* Packet.cc in Sources */,
 				408D0EDF1843EE5F006E13C6 /* main.cc in Sources */,
 				408D0EEF1843EF26006E13C6 /* PacketEngine.cc in Sources */,
 			);

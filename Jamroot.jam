@@ -19,14 +19,16 @@ use-project boost : ../../../Downloads/boost_1_55_0 ;
 # boost_python library from the project whose global ID is
 # /boost/python.
 project
-  : requirements <library>/boost/python//boost_python 
-                 <implicit-dependency>/boost//headers 
+  : requirements
+          <library>/boost/python//boost_python
+          <implicit-dependency>/boost//headers
   : usage-requirements <implicit-dependency>/boost//headers 
   ;
 
-# Declare the three extension modules.  You can specify multiple
+# Declare the extension modules.  You can specify multiple
 # source files after the colon separated by spaces.
-python-extension pcap_ext : PacketWarrior/pcap_ext.cc ;
+python-extension pcap_ext
+  : PacketWarrior/pcap_ext.cc PacketWarrior/PacketEngine.h PacketWarrior/PacketEngine.cc PacketWarrior/Packet.h ;
 
 # Put the extension and Boost.Python DLL in the current directory, so
 # that running script by hand works.
