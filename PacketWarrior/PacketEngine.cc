@@ -7,10 +7,17 @@
 
 #include "PacketEngine.h"
 
+// Forward the callback on to the PacketEngine instance.
+void auxilaryHandler(u_char *user,
+        const struct pcap_pkthdr* pkthdr, const u_char* packet) {
+    ((PacketEngine*) user)->callbackHandler(pkthdr, packet);
+}
+
 PacketEngine::PacketEngine() {
     this->devices = nullptr;
     this->handle = nullptr;
     this->selected_device = nullptr;
+    this->is_active = false;
 }
 
 PacketEngine::~PacketEngine() {
@@ -92,9 +99,19 @@ bool PacketEngine::setFilter(const char *filter, char *error_buf) {
     return true;
 }
 
+void PacketEngine::callbackHandler(
+        const struct pcap_pkthdr *pkthdr, const u_char *packet) {
+    Packet packet_obj(pkthdr, packet);
+    std::cout << "Length: " << packet_obj.length() << "\n";
+    std::cout << "Source IP: " << packet_obj.source() << "\n";
+    std::cout << "Destination IP: " << packet_obj.destination() << "\n";
+    std::cout << "Type: " << packet_obj.packet_type() << "\n";
+    std::cout << "Time: " << packet_obj.timestamp() << "\n\n";
+}
+
 // Activate the handle for the device and begin packet capturing loop. The caller
 // is responsible for spawning this method in a separate thread if desired.
-bool PacketEngine::startCapture(pcap_handler callback, char *error_buf) {
+bool PacketEngine::startCapture(char *error_buf) {
     if (!createHandle(error_buf))
         return false;
 
@@ -106,16 +123,43 @@ bool PacketEngine::startCapture(pcap_handler callback, char *error_buf) {
         strcpy(error_buf, pcap_geterr(this->handle));
         return false;
     }
-    // Defaulting to setting the sniffer to promiscuous mode, should probably
+    // Start pcap delivering packets in the background. In order to call the class method
+    // and circumvent the "this" pointer, the user option is utilized and the pointer to
+    // this object is cast in and then back out by the auxilary function above. The function
+    // is declared as a friend and has access to this private method that is called upon
+    // packet delivery.
+    //
+    // Note: Defaulting to setting the sniffer to promiscuous mode, should probably
     // provide a way to turn that off at some point.
-    if (pcap_loop(this->handle, -1, callback, NULL) == -1) {
+
+    //std::thread(pcap_loop, this->handle, -1, auxilaryHandler, (u_char*) this);
+    if (pcap_loop(this->handle, -1, auxilaryHandler, (u_char*) this)) {
         strcpy(error_buf, pcap_geterr(this->handle));
         return false;
-     }
-    return true;
+    }
+    this->is_active = true;
+
+    return this->is_active;
 }
 
 // End the capture session.
 void PacketEngine::endCapture() {
     pcap_close(this->handle);
+    this->is_active = false;
+}
+
+// Restore to a clean state.
+void PacketEngine::resetSession() {
+    endCapture();
+
+    delete[] this->devices;
+    delete this->selected_device;
+
+    this->devices = nullptr;
+    this->handle = nullptr;
+    this->selected_device = nullptr;
+}
+
+bool PacketEngine::isActive() {
+    return this->is_active;
 }

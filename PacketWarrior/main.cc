@@ -1,20 +1,12 @@
 #include <iostream>
 #include <cstdio>
+#include <thread>
 #include "PacketEngine.h"
-
-void auxilaryHandler(u_char *_, const struct pcap_pkthdr* pkthdr, const u_char* packet) {
-    Packet packet_obj(pkthdr, packet);
-    std::cout << "Length: " << packet_obj.length() << "\n";
-    std::cout << "Source IP: " << packet_obj.source() << "\n";
-    std::cout << "Destination IP: " << packet_obj.destination() << "\n";
-    std::cout << "Type: " << packet_obj.packet_type() << "\n";
-    std::cout << "Time: " << packet_obj.timestamp() << "\n\n";
-}
 
 int main(int argc, const char * argv[]) {
     using namespace std;
-    PacketEngine engine;
     char error_buf[PCAP_ERRBUF_SIZE];
+    PacketEngine engine;
     const char **devs = engine.getAvailableDevices(error_buf);
     if (devs == NULL) {
         cout << "Error finding devices: " << error_buf << endl;
@@ -46,7 +38,7 @@ int main(int argc, const char * argv[]) {
         }
     }
     cout << "Beginning capture...\n";
-    if (!engine.startCapture(&auxilaryHandler, error_buf)) {
+    if (!engine.startCapture(error_buf)) {
         cout << "Error initiating capture: " << error_buf << endl;
         return -4;
     }

@@ -12,7 +12,6 @@
 #include <iostream>
 #include <queue>
 #include <thread>
-#include <typeinfo>
 
 #include "pcap.h"
 
@@ -28,14 +27,19 @@ public:
     int getNumDevices();
     bool selectDevice(const char* dev, char *error_buf);
     bool setFilter(const char *filter, char *error_buf);
-    bool startCapture(pcap_handler callback, char *error_buf);
+    bool startCapture(char *error_buf);
     void endCapture();
+    void resetSession();
 
-    bool resetSession(char *error_buf);
-    Packet getNextPacket();
+    bool isActive();
+    Packet getNextPacket(bool wait);
     
+    friend void auxilaryHandler(u_char *user,
+            const struct pcap_pkthdr* pkthdr, const u_char* packet);
+
 private:
     bool createHandle(char *error_buf);
+    void callbackHandler(const struct pcap_pkthdr* pkthdr, const u_char* packet);
 
     char **devices;
     int num_devices;
@@ -49,9 +53,13 @@ private:
     bpf_u_int32 net_mask;
     // Compiled filter.
     struct bpf_program filter_p;
+    // Whether or not the session is running.
+    bool is_active;
 
     std::queue<Packet> packet_queue;
     
 };
+
+void auxilaryHandler(u_char *user, const struct pcap_pkthdr* pkthdr, const u_char* packet);
 
 #endif /* defined(__PacketWarrior__PacketEngine__) */
