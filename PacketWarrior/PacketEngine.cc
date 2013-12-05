@@ -106,6 +106,8 @@ bool PacketEngine::startCapture(pcap_handler callback, char *error_buf) {
         strcpy(error_buf, pcap_geterr(this->handle));
         return false;
     }
+    // Defaulting to setting the sniffer to promiscuous mode, should probably
+    // provide a way to turn that off at some point.
     if (pcap_loop(this->handle, -1, callback, NULL) == -1) {
         strcpy(error_buf, pcap_geterr(this->handle));
         return false;
