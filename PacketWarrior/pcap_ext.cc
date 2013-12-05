@@ -26,7 +26,7 @@ boost::python::list PacketEngine_getAvailableDevices(PacketEngine& self) {
     return device_list;
 }
 
-BOOST_PYTHON_MODULE(pcap_ext) {
+BOOST_PYTHON_MODULE(libpcap_ext) {
     using namespace boost::python;
     class_<PacketEngine>("PacketEngine")
         .def("getAvailableDevices", &PacketEngine_getAvailableDevices);
