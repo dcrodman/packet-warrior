@@ -46,6 +46,7 @@ const char ** PacketEngine::getAvailableDevices(char *error_buf) {
                 this->devices[i] = new char[sizeof(dev->name)];
                 strncpy(this->devices[i], dev->name, sizeof(dev->name) / sizeof(char));
             }
+            pcap_freealldevs(devs);
         }
     }
     return (const char**)this->devices;
@@ -102,15 +103,14 @@ bool PacketEngine::setFilter(const char *filter, char *error_buf) {
 void PacketEngine::callbackHandler(
         const struct pcap_pkthdr *pkthdr, const u_char *packet) {
     Packet packet_obj(pkthdr, packet);
-    std::cout << "Length: " << packet_obj.length() << "\n";
-    std::cout << "Source IP: " << packet_obj.source() << "\n";
-    std::cout << "Destination IP: " << packet_obj.destination() << "\n";
-    std::cout << "Type: " << packet_obj.packet_type() << "\n";
-    std::cout << "Time: " << packet_obj.timestamp() << "\n\n";
+    std::cout << packet_obj << "\n";
 }
 
 // Activate the handle for the device and begin packet capturing loop. The caller
-// is responsible for spawning this method in a separate thread if desired.
+// is responsible for spawning this method in a separate thread if desired. The
+// use_callback parameter should only be used if the caller wishes for pcap_loop
+// to occupy the main thread of execution. Otherwise packets will only be retrieved
+// from the handle during calls to getNextPacket().
 bool PacketEngine::startCapture(char *error_buf) {
     if (!createHandle(error_buf))
         return false;
@@ -132,13 +132,13 @@ bool PacketEngine::startCapture(char *error_buf) {
     // Note: Defaulting to setting the sniffer to promiscuous mode, should probably
     // provide a way to turn that off at some point.
 
-    //std::thread(pcap_loop, this->handle, -1, auxilaryHandler, (u_char*) this);
-    if (pcap_loop(this->handle, -1, auxilaryHandler, (u_char*) this)) {
+    /*
+    if (pcap_loop(this->handle, -1, auxilaryHandler, (u_char*) this) == -1) {
         strcpy(error_buf, pcap_geterr(this->handle));
         return false;
     }
+     */
     this->is_active = true;
-
     return this->is_active;
 }
 
@@ -162,4 +162,21 @@ void PacketEngine::resetSession() {
 
 bool PacketEngine::isActive() {
     return this->is_active;
+}
+
+Packet* PacketEngine::getNextPacket(char *error_buf) {
+    struct pcap_pkthdr *header;
+    const u_char *packet_data;
+    int result = 0;
+    do {
+        result = pcap_next_ex(this->handle, &header, &packet_data);
+        if (result == -1)
+            strcpy(error_buf, pcap_geterr(this->handle));
+        if (result > 0) {
+            Packet* pkt = new Packet(header, packet_data);
+            return pkt;
+        }
+    } while (result == 0);
+
+    return NULL;
 }

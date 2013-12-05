@@ -11,10 +11,8 @@
 #include <cstring>
 #include <iostream>
 #include <queue>
-#include <thread>
 
 #include "pcap.h"
-
 #include "Packet.h"
 
 class PacketEngine {
@@ -32,7 +30,7 @@ public:
     void resetSession();
 
     bool isActive();
-    Packet getNextPacket(bool wait);
+    Packet* getNextPacket(char *error_buf);
     
     friend void auxilaryHandler(u_char *user,
             const struct pcap_pkthdr* pkthdr, const u_char* packet);
@@ -55,9 +53,6 @@ private:
     struct bpf_program filter_p;
     // Whether or not the session is running.
     bool is_active;
-
-    std::queue<Packet> packet_queue;
-    
 };
 
 void auxilaryHandler(u_char *user, const struct pcap_pkthdr* pkthdr, const u_char* packet);
