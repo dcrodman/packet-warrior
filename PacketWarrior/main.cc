@@ -8,6 +8,7 @@ void auxilaryHandler(u_char *_, const struct pcap_pkthdr* pkthdr, const u_char* 
     std::cout << "Source IP: " << packet_obj.source() << "\n";
     std::cout << "Destination IP: " << packet_obj.destination() << "\n";
     std::cout << "Type: " << packet_obj.packet_type() << "\n";
+    std::cout << "Time: " << packet_obj.timestamp() << "\n\n";
 }
 
 int main(int argc, const char * argv[]) {
