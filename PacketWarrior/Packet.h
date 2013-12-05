@@ -22,16 +22,23 @@ using namespace std;
 class Packet {
 public:
     Packet(const struct pcap_pkthdr* pkthdr, const u_char* packet);
+    int length();
     string source();
     string destination();
     string packet_type();
     string timestamp();
 
 private:
+    u_char packet_data;
+    struct pcap_pkthdr packet_header;
+    ether_header *eth_header;
+
     string pkt_timestamp;
     string source_ip;
     string destination_ip;
     string pkt_type;
+
+    void determineIPAddresses();
 };
 
 #endif
