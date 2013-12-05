@@ -8,24 +8,30 @@
 #ifndef PacketWarrior_Packet_h
 #define PacketWarrior_Packet_h
 
+#include <cstring>
 #include <string>
-#include <ctime>
+#include <sys/time.h>
 
 #include <netinet/in.h>
-//#include <arpa/inet.h>
 #include <netinet/if_ether.h>
+
+#include "pcap.h"
+
+using namespace std;
 
 class Packet {
 public:
     Packet(const struct pcap_pkthdr* pkthdr, const u_char* packet);
-    std::string source();
-    std::string destination();
-    std::string packet_type();
+    string source();
+    string destination();
+    string packet_type();
+    string timestamp();
 
 private:
-    std::string source_ip;
-    std::string destination_ip;
-    std::string pkt_type;
+    string pkt_timestamp;
+    string source_ip;
+    string destination_ip;
+    string pkt_type;
 };
 
 #endif
