@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cstdio>
-#include <thread>
 #include "PacketEngine.h"
 
 int main(int argc, const char * argv[]) {
@@ -41,6 +40,12 @@ int main(int argc, const char * argv[]) {
     if (!engine.startCapture(error_buf)) {
         cout << "Error initiating capture: " << error_buf << endl;
         return -4;
+    }
+    int num_packets = 0;
+    while (num_packets++ < 30) {
+        Packet *packet_obj = engine.getNextPacket(error_buf);
+        std::cout << "Packet " << num_packets << "\n";
+        std::cout << *packet_obj << "\n\n";
     }
     return 0;
 }
