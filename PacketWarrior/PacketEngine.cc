@@ -100,7 +100,7 @@ bool PacketEngine::startCapture(pcap_handler callback, char *error_buf) {
 
     // Manually set the buffer size so that the application does not experience a
     // substantial delay before being able to process packets.
-    pcap_set_buffer_size(this->handle, 1024);
+    pcap_set_buffer_size(this->handle, 512);
 
     if (pcap_activate(handle) == PCAP_WARNING) {
         strcpy(error_buf, pcap_geterr(this->handle));
