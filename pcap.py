@@ -1,2 +1,3 @@
-import pcap_ext
-print pcap_ext.greet()
+import libpcap_ext
+engine = libpcap_ext.PacketEngine()
+print engine.getAvailableDevices()
