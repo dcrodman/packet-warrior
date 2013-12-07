@@ -7,7 +7,7 @@ except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
 
-class ComboBox(tk.Toplevel):
+class FilterBox(tk.Toplevel):
 
     def __init__(self, parent):
         self.parent = parent
@@ -15,7 +15,7 @@ class ComboBox(tk.Toplevel):
 
     def combo(self):
     	top = tk.Toplevel()
-    	top.geometry('320x100+319+132')
+    	top.geometry('320x100+319+252')
     	filterLabel = tk.Label(top, text="Select a filter using the up/down arrowhead keys \nor keyboard up/down arrow keys.\n Replace the value in quotes.")
         filterLabel.grid(column=0, row=0)
     	self.box_value = StringVar()
@@ -27,7 +27,25 @@ class ComboBox(tk.Toplevel):
         self.box.current(0)
         self.box.grid(column=0, row=1)
 
+class DeviceBox(tk.Toplevel):
+    def __init__(self, parent, devices):
+        self.parent = parent
+        self.combo(devices)
+
+    def combo(self, devices):
+        top = tk.Toplevel()
+        top.geometry('320x100+319+132')
+        filterLabel = tk.Label(top, text="Select a filter using the up/down arrowhead keys \nor keyboard up/down arrow keys.\n Replace the value in quotes.")
+        filterLabel.grid(column=0, row=0)
+        self.box_value = StringVar()
+        self.box = ttk.Combobox(top, textvariable=self.box_value)
+        self.box['values'] = devices
+        self.box.current(0)
+        self.box.grid(column=0, row=1)
+
+
 if __name__ == '__main__':
     root = Tk()
     app = Application(root)
     root.mainloop()
+
