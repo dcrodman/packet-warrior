@@ -1,10 +1,12 @@
 #include <iostream>
 #include <cstdio>
 #include "PacketEngine.h"
+#include "sniffex.h"
 
 int main(int argc, const char * argv[]) {
     using namespace std;
     char error_buf[PCAP_ERRBUF_SIZE];
+
     PacketEngine engine;
     const char **devs = engine.getAvailableDevices(error_buf);
     if (devs == NULL) {
@@ -45,7 +47,12 @@ int main(int argc, const char * argv[]) {
     while (num_packets++ < 30) {
         Packet *packet_obj = engine.getNextPacket(error_buf);
         std::cout << "Packet " << num_packets << "\n";
-        std::cout << *packet_obj << "\n\n";
+        std::cout << *packet_obj << "\n";
+        if (packet_obj->protocol().compare("TCP") == 0 ||
+                packet_obj->protocol().compare("UDP") == 0) {
+            print_payload(packet_obj->payload(), packet_obj->payload_length());
+            std::cout << "\n\n";
+        }
     }
     return 0;
 }

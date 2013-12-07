@@ -78,9 +78,10 @@ Packet::Packet(const struct pcap_pkthdr* pkthdr, const u_char* packet) {
 
         /* Define/compute TCP header offset */
         tcp = (struct sniff_tcp*)(packet + SIZE_ETHERNET + size_ip);
+        // TCP segments are 20 bytes.
         int size_tcp = TH_OFF(tcp)*4;
         if (size_tcp < 20)
-            this->valid_packet = false;
+            valid_packet = false;
 
         sequence_num = tcp->th_seq;
         acknowledgement_num = tcp->th_ack;
@@ -96,7 +97,9 @@ Packet::Packet(const struct pcap_pkthdr* pkthdr, const u_char* packet) {
 
     } else if (pkt_protocol.compare("UDP") == 0) {
         // UDP Segment structure consists of 4 header fields (src port, dest port,
-        // length, and checksum), each 16 bits. The data field is variable
+        // length, and checksum), each 2 bytes. The data field is variable, so we
+        // need to calculate the payload based on the position of the header
+        // relative to the end of the packet.
 
         // UDP header
         struct sniff_udp {
@@ -107,13 +110,15 @@ Packet::Packet(const struct pcap_pkthdr* pkthdr, const u_char* packet) {
         };
         const struct sniff_udp *udp;
 
-        // TODO(drew): Check for malformed UDP packet header!
-
         // Compute UDP offset within the Ethernet/IP headers.
         udp = (struct sniff_udp*)(packet + SIZE_ETHERNET + size_ip);
+
         pkt_src_port = ntohs(udp->src_port);
         pkt_src_port = ntohs(udp->dest_port);
-        pkt_payload_size = udp->len;
+
+        // Magic number 8 is the size of the UDP segment
+        pkt_payload = (u_char *)(packet + SIZE_ETHERNET + size_ip + 8);
+        pkt_payload_size = ntohs(ip->ip_len) - (size_ip + 8);
     }
 }
 
