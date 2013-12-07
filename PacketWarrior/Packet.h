@@ -38,8 +38,8 @@ public:
     const u_char* payload();
     int payload_length();
 
-    u_int seq_number();
-    u_int ack_number();
+    int seq_number();
+    int ack_number();
 
     bool is_valid();
 

@@ -209,12 +209,12 @@ std::string Packet::protocol() {
 }
 
 // Returns 0 if the protocol is not TCP.
-u_int Packet::seq_number() {
+int Packet::seq_number() {
     return this->sequence_num;
 }
 
 // Returns 0 if the protocol is not TCP.
-u_int Packet::ack_number() {
+int Packet::ack_number() {
     return this->acknowledgement_num;
 }
 
