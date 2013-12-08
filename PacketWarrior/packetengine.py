@@ -30,27 +30,15 @@ class DecoderThread(Thread):
         logging.basicConfig(filename='pw.log')
         self.pcap = pcapObj
         self.myfile = open("temp.txt", "w")
-        self.is_sniffing = False
         Thread.__init__(self)
 
     def run(self):
-        # Sniff ad infinitum.
         # PacketHandler shall be invoked by pcap for every packet.
-        self.is_sniffing = True
-        while self.is_sniffing:
-            try:
-                hdr, data = self.pcap.next()
-                self.packetHandler(hdr,data)
-                time.sleep(0.1)
-            except Exception, e:
-                logging.error(e)
-        self.pcap.close()
-
-    def get_condition(self):
-        return self.is_sniffing
-
-    def set_condition(self,value):
-        self.is_sniffing = value
+        try:
+            hdr, data = self.pcap.next()
+            self.packetHandler(hdr,data)
+        except Exception, e:
+            logging.error(e)
 
     def packetHandler(self, hdr, data):
         # Use the ImpactDecoder to turn the rawpacket into a hierarchy
@@ -93,7 +81,8 @@ class PacketEngine():
             self.cap = pcapy.open_live(self.selected_device, ETHERNET_MAX_FRAME_SIZE, PROMISC_MODE, sniff_timeout)
             return self.selected_device, self.cap.getnet(), self.cap.getmask()
         except Exception, e:
-            print "Failed to set packet capture reader : open_live() failed for device='%s'. Error: %s" % (self.selected_device, str(e))
+            raise Exception('Failed to set packet capture reader : open_live()'\
+                ' failed for device=\'%s\'. Error: %s' % (self.selected_device, str(e)))
 
     def set_filter(self, filter):
         self.cap.setfilter(filter)
@@ -101,14 +90,7 @@ class PacketEngine():
     def start_capture(self):
         # Start sniffing thread and finish main thread.
         self.deleteContent("temp.txt")
-        self.thread = DecoderThread(self.cap)
-        self.thread.run()
-
-    def stop_capture(self):
-        print "Attempting to stop thread"
-        if self.thread is not None:
-            self.thread.set_condition(False)
-            self.thread = None
+        return self.cap
 
     def deleteContent(self, inputfile):
         pfile = open(inputfile, "w")

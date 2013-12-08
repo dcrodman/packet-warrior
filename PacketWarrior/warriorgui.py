@@ -16,7 +16,7 @@ try:
 except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
-import boxes, tkMessageBox, packetengine
+import boxes, tkMessageBox, packetengine, time
 import tkMessageBox
 
 def vp_start_gui():
@@ -326,10 +326,25 @@ class PacketWarrior(Frame):
         self.pktEngine.set_filter(filterString)
 
     def start_capture(self):
-        self.pktEngine.start_capture()
+        self.cap = self.pktEngine.start_capture()
+        self.thread = packetengine.DecoderThread(self.cap)
+        self.capture_packet()
+
+    def capture_packet(self):
+        self.thread.run()
+        self.stop_capture = 0
+        self.after(0, self.capture_more)
+
+    def capture_more(self):
+        if self.stop_capture:
+            return
+        self.thread.run()
+        self.after(1, self.capture_more)
 
     def stop_capture(self):
-        self.pktEngine.stop_capture()
+        self.stop_capture = 1
+
+    
         
 
 if __name__ == '__main__':
