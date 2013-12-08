@@ -27,7 +27,7 @@ class DecoderThread(Thread):
             raise Exception("Datalink type not supported: " % datalink)
 
         self.pcap = pcapObj
-        self.myfile = open("temp.txt", "w", 66)
+        self.myfile = open("temp.txt", "w")
         Thread.__init__(self)
 
     def run(self):
@@ -40,7 +40,10 @@ class DecoderThread(Thread):
         # of ImpactPacket instances.
         # Display the packet in human-readable form.
         try:
-            self.myfile.write(str(self.decoder.decode(data)))
+            packet = str(self.decoder.decode(data))
+            if len(packet) > 0:
+                self.myfile.write("\nTIMESTAMP: %s\n" % str(datetime.datetime.utcnow()))
+            self.myfile.write(packet)
         except Exception, e:
             print e
 
@@ -51,6 +54,7 @@ class PacketEngine():
         self.available_devices = None
         self.cap = None
         self.thread = None
+        self.deleteContent("temp.txt")
 
     def get_available_devices(self):
         self.available_devices = pcapy.findalldevs()
@@ -80,13 +84,19 @@ class PacketEngine():
 
     def start_capture(self):
         # Start sniffing thread and finish main thread.
-        self.thread = DecoderThread(self.cap).start()
+        self.thread = DecoderThread(self.cap).run()
 
     def stop_capture(self):
         print "Attempting to stop thread"
         if self.thread is not None:
             self.thread.terminate()
+            self.thread.join()
             self.thread = None
+
+    def deleteContent(self, inputfile):
+        pfile = open(inputfile, "w")
+        pfile.seek(0)
+        pfile.truncate()
 
 if __name__ == "__main__":
   p = PacketEngine()
