@@ -68,7 +68,7 @@ class PacketWarrior(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.grid(ipady=0)
-        self.filename = None
+        self.packetfile = "temp.txt"
 
         for r in range(1):
             self.master.rowconfigure(r, weight=1)    
@@ -275,11 +275,11 @@ class PacketWarrior(Frame):
     def show_packet_list(self):
         platform = sys.platform
         if platform == "darwin":
-            os.system("open -a TextEdit temp.txt") 
+            os.system("open -a TextEdit %s" % self.packetfile) 
         elif platform == "linux":
-            os.system("gedit temp.txt")
+            os.system("gedit %s" % self.packetfile)
         elif platform == 'win32':
-            os.system("notepad temp.txt")
+            os.system("notepad %s" % self.packetfile)
 
     def about(self):
         tkMessageBox.showinfo("About PacketWarrior", "PacketWarrior\n\nVersion 0.1\n\nCopyright 2013\nDrew Rodman and Jonathan Loy")        
@@ -291,22 +291,18 @@ class PacketWarrior(Frame):
         sys.exit()
 
     def open_file(self):
-        tkMessageBox.showinfo("Open File", "The Open File functionality not yet implemented.")
-        
-        '''
+        #tkMessageBox.showinfo("Open File", "The Open File functionality not yet implemented.")
+        platform = sys.platform
         import tkFileDialog,csv
-        input_file = tkFileDialog.askopenfile(parent=root,mode='rb',title='Choose a file')
-        if input_file != None:
-            reader = csv.reader(input_file,delimiter='}"', quotechar='"')
-            for row in reader:
-                pList.append()
-        input_file.close()
-        for x in pList:
-            print x
-        print ('openFile')
+        inputfile = tkFileDialog.askopenfilename(parent=root,title='Choose a file')
+        if platform == "darwin":
+            command = "open -a TextEdit %s" % inputfile
+        elif platform == "linux":
+            command = "gedit %s" % inputfile
+        elif platform == 'win32':
+            command =  "notepad %s" % inputfile
+        os.system(command)
         
-        sys.stdout.flush()
-        '''
 
     def open_help(self):
         tkMessageBox.showinfo("Help", "The Help functionality not yet implemented.")
@@ -325,7 +321,7 @@ class PacketWarrior(Frame):
     def save_file_as(self):
         import tkFileDialog, shutil
         fout = tkFileDialog.asksaveasfile(mode='w', defaultextension=".txt")
-        shutil.copyfile("temp.txt", fout)
+        shutil.copyfile(self.packetfile, fout)
         '''
         self.filename = fout
         w = csv.writer(fout)
