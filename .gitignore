@@ -3,3 +3,4 @@ bin
 *.dylib
 *.xcbkptlist
 UserInterfaceState.xcuserstate
+*.pyc
