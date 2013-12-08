@@ -16,7 +16,7 @@ try:
 except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
-import boxes, tkMessageBox, packetengine, time
+import boxes, tkMessageBox, time
 import tkMessageBox
 
 def vp_start_gui():
@@ -152,14 +152,6 @@ class PacketWarrior(Frame):
                 background="systemWindowBody",
                 foreground="#000000",
                 label="View")
-        self.view.add_checkbutton(
-                variable=NewCheck,
-                activebackground="systemWindowBody",
-                activeforeground="#000000",
-                background="systemWindowBody",
-                command=self.TODO,
-                foreground="#000000",
-                label="Toolbar")
         self.view.add_command(
                 activebackground="systemWindowBody",
                 activeforeground="#000000",
@@ -167,14 +159,6 @@ class PacketWarrior(Frame):
                 command=self.show_packet_list,
                 foreground="#000000",
                 label="Packet List")
-        self.view.add_checkbutton(
-                variable=NewCheck,
-                activebackground="systemWindowBody",
-                activeforeground="#000000",
-                background="systemWindowBody",
-                command=self.TODO,
-                foreground="#000000",
-                label="Packet Details")
         self.capture = Menu(master,tearoff=0)
         self.menubar.add_cascade(menu=self.capture,
                 activebackground="systemWindowBody",
@@ -256,10 +240,6 @@ class PacketWarrior(Frame):
         self.PktLstButton.grid(row=0, column=9)
 
         # End Toolbar
-
-    def TODO(self):
-        print ('TODO')
-        sys.stdout.flush()
 
     def show_packet_list(self):
         platform = sys.platform
