@@ -3,6 +3,7 @@
 # Partially enerated by PAGE version 4.1
 # In conjuction with Tcl version 8.6
 #    Nov. 28, 2013 06:55:56 PM
+# Icons from Open Icon Library 
 import sys, os
 
 try:
@@ -16,9 +17,7 @@ except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
 from mypackets import MyPacket
-import ptables
 import packetengine
-#import packet
 
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
@@ -242,28 +241,32 @@ class PacketWarrior(Frame):
         self.CloseButton = Button(master, image=self._img4, command=self.close_file, bd=-2)
         self.CloseButton.grid(row=0, column=3)
 
-        self._img5 = PhotoImage(file="img/filter.gif")
-        self.FilterButton = Button(master, image=self._img5, command=self.set_filters, bd=-2)
-        self.FilterButton.grid(row=0, column=4)
+        self._img5 = PhotoImage(file="img/device.gif")
+        self.DeviceButton = Button(master, image=self._img5, command=self.get_devices, bd=-2)
+        self.DeviceButton.grid(row=0, column=4)
 
-        self._img6 = PhotoImage(file="img/play.gif")
-        self.StartButton = Button(master, image=self._img6, command=self.start_capture, bd=-2)
-        self.StartButton.grid(row=0, column=5)
+        self._img6 = PhotoImage(file="img/filter.gif")
+        self.FilterButton = Button(master, image=self._img6, command=self.set_filters, bd=-2)
+        self.FilterButton.grid(row=0, column=5)
+
+        self._img7 = PhotoImage(file="img/play.gif")
+        self.StartButton = Button(master, image=self._img7, command=self.start_capture, bd=-2)
+        self.StartButton.grid(row=0, column=6)
 
         self._img8 = PhotoImage(file="img/stop.gif")
         self.StopButton = Button(master, image=self._img8, command=self.stop_capture, bd=-2)
-        self.StopButton.grid(row=0, column=6)
+        self.StopButton.grid(row=0, column=7)
 
         self._img9 = PhotoImage(file="img/help.gif")
         self.HelpButton = Button(master, image=self._img9, command=self.open_help, bd=-2)
-        self.HelpButton.grid(row=0, column=7)
+        self.HelpButton.grid(row=0, column=8)
 
         self._img10 = PhotoImage(file="img/exit.gif")
         self.ExitButton = Button(master, image=self._img10, command=self.exit_pw, bd=-2)
-        self.ExitButton.grid(row=0, column=8)
+        self.ExitButton.grid(row=0, column=9)
 
         self.PktLstButton = Button(master, command=self.show_packet_list, bd=-2, text="PacketList")
-        self.PktLstButton.grid(row=0, column=9)
+        self.PktLstButton.grid(row=0, column=10)
 
         # End Toolbar
 
@@ -272,13 +275,6 @@ class PacketWarrior(Frame):
         sys.stdout.flush()
 
     def show_packet_list(self):
-        '''
-        if self.data:
-            win = ptables.PTable(self.data)
-        else:
-            self.build_list()
-            win = ptables.PTable(self.data)
-        '''
         platform = sys.platform
         if platform == "darwin":
             os.system("open -a TextEdit temp.txt") 
@@ -334,14 +330,16 @@ class PacketWarrior(Frame):
         '''
 
     def save_file_as(self):
-        import tkFileDialog, csv
+        import tkFileDialog, shutil
         fout = tkFileDialog.asksaveasfile(mode='w', defaultextension=".txt")
+        shutil.copyfile("temp.txt", fout)
+        '''
         self.filename = fout
         w = csv.writer(fout)
         for key, val in self.data.items():
             w.writerow([val])
         fout.close()
-        sys.stdout.flush()
+        '''
 
     def get_devices(self):
         import boxes
