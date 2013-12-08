@@ -4,11 +4,13 @@
 import socket
 from struct import *
 import datetime
-import pcapy
 import sys
+import time
 import fileinput
 import os, logging, socket
-import pcapy, impacket, impacket.ImpactDecoder
+import pcapy
+from pcapy import PcapError
+import impacket, impacket.ImpactDecoder
 from impacket.ImpactDecoder import EthDecoder, LinuxSLLDecoder
 from threading import Thread
 
@@ -25,7 +27,7 @@ class DecoderThread(Thread):
             self.decoder = LinuxSLLDecoder()
         else:
             raise Exception("Datalink type not supported: " % datalink)
-
+        logging.basicConfig(filename='pw.log')
         self.pcap = pcapObj
         self.myfile = open("temp.txt", "w")
         self.is_sniffing = False
@@ -36,7 +38,12 @@ class DecoderThread(Thread):
         # PacketHandler shall be invoked by pcap for every packet.
         self.is_sniffing = True
         while self.is_sniffing:
-            self.pcap.loop(0, self.packetHandler)
+            try:
+                hdr, data = self.pcap.next()
+                self.packetHandler(hdr,data)
+                time.sleep(0.1)
+            except Exception, e:
+                logging.error(e)
         self.pcap.close()
 
     def get_condition(self):
@@ -55,7 +62,7 @@ class DecoderThread(Thread):
                 self.myfile.write("\nTIMESTAMP: %s\n" % str(datetime.datetime.utcnow()))
             self.myfile.write(packet)
         except Exception, e:
-            print e
+            logging.error(e)
 
 class PacketEngine():
 
