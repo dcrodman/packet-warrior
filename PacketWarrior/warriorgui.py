@@ -16,8 +16,8 @@ try:
 except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
-from mypackets import MyPacket
-import packetengine
+import boxes, tkMessageBox, packetengine
+import tkMessageBox
 
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
@@ -63,8 +63,6 @@ def init():
     pass
 
 class PacketWarrior(Frame):
-    data = {}
-    pList = []
     pktEngine = packetengine.PacketEngine()
 
     def __init__(self, master=None):
@@ -284,18 +282,15 @@ class PacketWarrior(Frame):
             os.system("notepad temp.txt")
 
     def about(self):
-        import tkMessageBox
         tkMessageBox.showinfo("About PacketWarrior", "PacketWarrior\n\nVersion 0.1\n\nCopyright 2013\nDrew Rodman and Jonathan Loy")        
 
     def close_file(self):
-        import tkMessageBox
         tkMessageBox.showinfo("Close File", "The Close File functionality not yet implemented.")
 
     def exit_pw(self):
         sys.exit()
 
     def open_file(self):
-        import tkMessageBox
         tkMessageBox.showinfo("Open File", "The Open File functionality not yet implemented.")
         
         '''
@@ -314,9 +309,7 @@ class PacketWarrior(Frame):
         '''
 
     def open_help(self):
-        import tkMessageBox
         tkMessageBox.showinfo("Help", "The Help functionality not yet implemented.")
-        sys.stdout.flush()
 
     def save_file(self):
         '''
@@ -342,7 +335,6 @@ class PacketWarrior(Frame):
         '''
 
     def get_devices(self):
-        import boxes
         devices = self.pktEngine.get_available_devices()
         self.deviceBox = boxes.DeviceBox(self, devices)
         self.deviceBox.box.bind('<Return>', self.set_device)
@@ -350,10 +342,11 @@ class PacketWarrior(Frame):
     def set_device(self, other):
         deviceString = self.deviceBox.box_value.get()
         deviceString = deviceString.translate(None, '\'')
-        self.pktEngine.set_device(deviceString)
+        device, net, mask = self.pktEngine.set_device(deviceString)
+        #self.deviceBox.quit()
+        tkMessageBox.showinfo("Device Set", "Set to capture on %s: net=%s, mask=%s" % (device, net, mask))    
 
     def set_filters(self):
-        import boxes
         self.filterBox = boxes.FilterBox(self)
         self.filterBox.box.bind('<Return>', self.update_filter)
     
@@ -368,17 +361,6 @@ class PacketWarrior(Frame):
     def stop_capture(self):
         self.pktEngine.stop_capture()
         
-    '''
-    def getNextPacket(self):
-        while True:
-            if self.capturing:
-                self.pList.append(self.pktEngine.getNextPacket())
-                return                              
-    '''
-    def build_list(self):
-        if self.pList:
-            for i in range(len(self.pList)):
-                self.data[i] = self.pList[i].__dict__
 
 if __name__ == '__main__':
     vp_start_gui()
