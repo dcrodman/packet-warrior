@@ -64,7 +64,6 @@ class PacketEngine():
         self.available_devices = None
         self.cap = None
         self.thread = None
-        self.deleteContent("temp.txt")
 
     def get_available_devices(self):
         self.available_devices = pcapy.findalldevs()
@@ -94,6 +93,7 @@ class PacketEngine():
 
     def start_capture(self):
         # Start sniffing thread and finish main thread.
+        self.deleteContent("temp.txt")
         self.thread = DecoderThread(self.cap)
         self.thread.run()
 
