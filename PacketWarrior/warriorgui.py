@@ -3,7 +3,7 @@
 # Partially enerated by PAGE version 4.1
 # In conjuction with Tcl version 8.6
 #    Nov. 28, 2013 06:55:56 PM
-import sys
+import sys, os
 
 try:
     from Tkinter import *
@@ -17,8 +17,8 @@ except ImportError:
     py3 = 1
 from mypackets import MyPacket
 import ptables
-import PacketEngine
-import Packet
+import packetengine
+#import packet
 
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
@@ -66,7 +66,7 @@ def init():
 class PacketWarrior(Frame):
     data = {}
     pList = []
-    pktEngine = PacketEngine.PacketEngine()
+    pktEngine = packetengine.PacketEngine()
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
@@ -272,11 +272,20 @@ class PacketWarrior(Frame):
         sys.stdout.flush()
 
     def show_packet_list(self):
+        '''
         if self.data:
             win = ptables.PTable(self.data)
         else:
             self.build_list()
             win = ptables.PTable(self.data)
+        '''
+        platform = sys.platform
+        if platform == "darwin":
+            os.system("open -a TextEdit temp.txt") 
+        elif platform == "linux":
+            os.system("gedit temp.txt")
+        elif platform == 'win32':
+            os.system("notepad temp.txt")
 
     def about(self):
         import tkMessageBox
@@ -314,6 +323,7 @@ class PacketWarrior(Frame):
         sys.stdout.flush()
 
     def save_file(self):
+        '''
         import csv
         if self.filename:
             w = csv.writer(open(self.filename, "w"))
@@ -321,7 +331,7 @@ class PacketWarrior(Frame):
                 w.writerow([val])
         else:
             self.save_file_as()
-        sys.stdout.flush()
+        '''
 
     def save_file_as(self):
         import tkFileDialog, csv
@@ -335,15 +345,14 @@ class PacketWarrior(Frame):
 
     def get_devices(self):
         import boxes
-        devices = self.pktEngine.getAvailableDevices()
-        devices = ("device1", "device2")
+        devices = self.pktEngine.get_available_devices()
         self.deviceBox = boxes.DeviceBox(self, devices)
         self.deviceBox.box.bind('<Return>', self.set_device)
 
     def set_device(self, other):
         deviceString = self.deviceBox.box_value.get()
         deviceString = deviceString.translate(None, '\'')
-        self.pktEngine.selectDevice(deviceString)
+        self.pktEngine.set_device(deviceString)
 
     def set_filters(self):
         import boxes
@@ -353,22 +362,21 @@ class PacketWarrior(Frame):
     def update_filter(self, other):
         filterString = self.filterBox.box_value.get()
         filterString =  filterString.translate(None, '\'')
-        self.pktEngine.setFilter(filterString)
+        self.pktEngine.set_filter(filterString)
 
     def start_capture(self):
-        self.pktEngine.startCapture()
-        self.capturing = True
+        self.pktEngine.start_capture()
 
     def stop_capture(self):
-        self.pktEngine.endCapture()
-        self.capturing = False
-
+        self.pktEngine.stop_capture()
+        
+    '''
     def getNextPacket(self):
         while True:
             if self.capturing:
                 self.pList.append(self.pktEngine.getNextPacket())
                 return                              
-
+    '''
     def build_list(self):
         if self.pList:
             for i in range(len(self.pList)):
