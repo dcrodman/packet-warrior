@@ -8,7 +8,6 @@ import sys, os
 
 IMG_DIR = os.path.join(
        os.path.dirname(os.path.abspath(__file__)), 'img/')
-print IMG_DIR
 
 try:
     from Tkinter import *
