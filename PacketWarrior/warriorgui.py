@@ -293,13 +293,6 @@ class PacketWarrior(Frame):
     def open_help(self):
         tkMessageBox.showinfo("Help", "The Help functionality not yet implemented.")
 
-    def save_file(self):
-        w = open(self.packetfile, "w")
-        for val in self.packetList:
-            val = str(val)
-            w.write(val)
-            w.write('\n')
-
     def save_file_as(self):
         import tkFileDialog, shutil
         fout = tkFileDialog.asksaveasfilename(defaultextension='.txt')
