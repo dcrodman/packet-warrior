@@ -17,7 +17,8 @@ except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
 import boxes, tkMessageBox, time
-import tkMessageBox
+import tkMessageBox, pehelper
+import pcap_ext
 
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
@@ -63,7 +64,8 @@ def init():
     pass
 
 class PacketWarrior(Frame):
-    pktEngine = packetengine.PacketEngine()
+    pktEngine = pcap_ext.PacketEngine()
+    packetList = []
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
@@ -242,6 +244,8 @@ class PacketWarrior(Frame):
         # End Toolbar
 
     def show_packet_list(self):
+        self.buildList()
+        '''
         platform = sys.platform
         if platform == "darwin":
             os.system("open -a TextEdit %s" % self.packetfile) 
@@ -249,6 +253,7 @@ class PacketWarrior(Frame):
             os.system("gedit %s" % self.packetfile)
         elif platform == 'win32':
             os.system("notepad %s" % self.packetfile)
+        '''
 
     def about(self):
         tkMessageBox.showinfo("About PacketWarrior", "PacketWarrior\n\nVersion 0.1\n\nCopyright 2013\nDrew Rodman and Jonathan Loy")        
@@ -285,16 +290,18 @@ class PacketWarrior(Frame):
                 self.packetfile = fout
 
     def get_devices(self):
-        devices = self.pktEngine.get_available_devices()
+        devices = self.pktEngine.getAvailableDevices()
         self.deviceBox = boxes.DeviceBox(self, devices)
         self.deviceBox.box.bind('<Return>', self.set_device)
 
     def set_device(self, other):
         deviceString = self.deviceBox.box_value.get()
         deviceString = deviceString.translate(None, '\'')
-        device, net, mask = self.pktEngine.set_device(deviceString)
-        #self.deviceBox.quit()
-        tkMessageBox.showinfo("Device Set", "Set to capture on %s: net=%s, mask=%s" % (device, net, mask))    
+        deviceString = str(deviceString)
+        result = self.pktEngine.selectDevice(deviceString)   
+        if result is None:
+            tkMessageBox.showinfo("Device", "%s has been set as the selected device." % deviceString)
+
 
     def set_filters(self):
         self.filterBox = boxes.FilterBox(self)
@@ -303,26 +310,37 @@ class PacketWarrior(Frame):
     def update_filter(self, other):
         filterString = self.filterBox.box_value.get()
         filterString =  filterString.translate(None, '\'')
-        self.pktEngine.set_filter(filterString)
+        self.pktEngine.setFilter(filterString)
 
     def start_capture(self):
-        self.cap = self.pktEngine.start_capture()
-        self.thread = packetengine.DecoderThread(self.cap)
+        result = self.pktEngine.startCapture()
         self.capture_packet()
+        self.thread = pehelper(self.pktEngine)
 
     def capture_packet(self):
-        self.thread.run()
         self.stop_capture = 0
-        self.after(0, self.capture_more)
+        packetList.append(self.thread.run())
+        self.after(1, self.capture_more)
 
     def capture_more(self):
         if self.stop_capture:
             return
-        self.thread.run()
+        packetList.append(self.thread.run())
         self.after(1, self.capture_more)
 
     def stop_capture(self):
         self.stop_capture = 1
+        self.pktEngine.stopCapture()
+
+    def reset_session(self):
+        self.pktEngine.resetSession()
+
+    def buildList(self):
+        import csv
+        w = csv.writer(open("output.csv", "w"))
+        for val in self.pList:
+            w.writerow(val)
+        print ('saveFile')
 
     
         
