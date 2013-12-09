@@ -5,6 +5,7 @@
 #    Nov. 28, 2013 06:55:56 PM
 # Icons from Open Icon Library 
 import sys, os
+import pcap_ext as packetengine
 
 try:
     from Tkinter import *
@@ -298,10 +299,14 @@ class PacketWarrior(Frame):
         deviceString = self.deviceBox.box_value.get()
         deviceString = deviceString.translate(None, '\'')
         deviceString = str(deviceString)
-        result = self.pktEngine.selectDevice(deviceString)   
-        if result is None:
-            tkMessageBox.showinfo("Device", "%s has been set as the selected device." % deviceString)
 
+        self.pktEngine.selectDevice(deviceString)
+        net = self.pktEngine.getNetAddress()
+        mask = self.pktEngine.getNetMask()
+        #self.deviceBox.quit()
+        tkMessageBox.showinfo(
+            "Device Set",
+            "Set to capture on %s: net=%s, mask=%s" % (deviceString, net, mask))
 
     def set_filters(self):
         self.filterBox = boxes.FilterBox(self)
