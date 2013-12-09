@@ -184,7 +184,6 @@ Packet* PacketEngine::getNextPacket(char *error_buf) {
                 strcpy(error_buf, pcap_geterr(this->handle));
             if (result > 0) {
                 Packet* pkt = new Packet(header, packet_data);
-                std::cout << pkt << "\n";
                 if (pkt->is_valid())
                     return pkt;
                 else
