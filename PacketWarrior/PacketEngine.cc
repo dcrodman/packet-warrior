@@ -103,7 +103,8 @@ bool PacketEngine::setFilter(const char *filter, char *error_buf) {
 void PacketEngine::callbackHandler(
         const struct pcap_pkthdr *pkthdr, const u_char *packet) {
     Packet packet_obj(pkthdr, packet);
-    std::cout << packet_obj << "\n";
+    if (packet_obj.is_valid())
+        packetQueue.push(packet_obj);
 }
 
 // Activate the handle for the device and begin packet capturing loop. The caller
