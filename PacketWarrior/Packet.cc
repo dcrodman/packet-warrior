@@ -114,7 +114,7 @@ Packet::Packet(const struct pcap_pkthdr* pkthdr, const u_char* packet) {
         udp = (struct sniff_udp*)(packet + SIZE_ETHERNET + size_ip);
 
         pkt_src_port = ntohs(udp->src_port);
-        pkt_src_port = ntohs(udp->dest_port);
+        pkt_dest_port = ntohs(udp->dest_port);
 
         // Magic number 8 is the size of the UDP segment
         pkt_payload = (u_char *)(packet + SIZE_ETHERNET + size_ip + 8);
