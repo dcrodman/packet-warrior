@@ -10,9 +10,12 @@ for device in devices:
 	print 'Device: %s' % device
 selected_dev = input("Enter number of device to sniff: ")
 
-engine.setFilter("tcp port 80")
 engine.selectDevice(devices[selected_dev])
 engine.startCapture()
 
-print engine.getNextPacket()
-print "Done"
+for i in range(1, 15):
+	packet = engine.getNextPacket()
+	print packet
+	print "Payload: %s\n" % packet.payload()
+
+print "\nCapture Complete."
