@@ -139,7 +139,7 @@ bool PacketEngine::startCapture(char *error_buf) {
     }
      */
     this->is_active = true;
-    return this->is_active;
+    return true;
 }
 
 // End the capture session.
@@ -165,6 +165,12 @@ bool PacketEngine::isActive() {
 }
 
 Packet* PacketEngine::getNextPacket(char *error_buf) {
+
+    if (!this->is_active) {
+        strcpy(error_buf, "Engine not active");
+        return NULL;
+    }
+
     struct pcap_pkthdr *header;
     const u_char *packet_data;
     int result = 0;
