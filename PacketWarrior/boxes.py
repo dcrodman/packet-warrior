@@ -47,6 +47,7 @@ class DeviceBox(tk.Toplevel):
         self.box['values'] = devices
         self.box.current(0)
         self.box.grid(column=0, row=1)
+        self.box.state(['!disabled', 'readonly'])
 
 
 if __name__ == '__main__':
