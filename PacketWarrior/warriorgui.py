@@ -333,12 +333,16 @@ class PacketWarrior(Frame):
     def capture_packet(self):
         self.end_capture = 0
         self.packetList.append(self.pktEngine.getNextPacket())
+        pkt = self.packetList[-1].payload()
+        self.packetList.append(pkt)
         self.after(1, self.capture_more)
 
     def capture_more(self):
         if self.end_capture:
             return
         self.packetList.append(self.pktEngine.getNextPacket())
+        pkt = self.packetList[-1].payload()
+        self.packetList.append(pkt)
         self.after(1, self.capture_more)
 
     def stop_capture(self):
@@ -351,10 +355,14 @@ class PacketWarrior(Frame):
 
     def buildList(self):
         w = open(self.packetfile, "w")
+        i =0 
         for val in self.packetList:
             val = str(val)
             w.write(val)
-            w.write('\n')
+            if (i % 2) != 0:
+                w.write('\n\n')
+            i = i +1
+            
 
     
         
