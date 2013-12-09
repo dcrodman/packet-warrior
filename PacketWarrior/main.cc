@@ -39,7 +39,7 @@ int main(int argc, const char * argv[]) {
         }
     }
     cout << "Beginning capture...\n";
-    if (!engine.startCapture(error_buf)) {
+    if (!engine.startCapture(error_buf, false)) {
         cout << "Error initiating capture: " << error_buf << endl;
         return -4;
     }

@@ -57,13 +57,12 @@ bool PacketEngine_setFilter(PacketEngine& self, std::string filter_exp) {
 void PacketEngine_startCapture(PacketEngine& self) {
     char error_buffer[PCAP_ERRBUF_SIZE] = { 0 };
 
-    self.startCapture(error_buffer);
+    self.startCapture(error_buffer, true);
     if (error_buffer[0])
         throw std::runtime_error(error_buffer);
 }
 
 Packet PacketEngine_getNextPacket(PacketEngine& self) {
-    std::cout << "Called\n";
     char error_buffer[PCAP_ERRBUF_SIZE] = { 0 };
     Packet *pkt = self.getNextPacket(error_buffer);
     std::cout << "Got Packet: " << *pkt << "\n";
