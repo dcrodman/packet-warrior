@@ -57,7 +57,7 @@ bool PacketEngine_setFilter(PacketEngine& self, std::string filter_exp) {
 void PacketEngine_startCapture(PacketEngine& self) {
     char error_buffer[PCAP_ERRBUF_SIZE] = { 0 };
 
-    self.startCapture(error_buffer);
+    self.startCapture(error_buffer, true);
     if (error_buffer[0])
         throw std::runtime_error(error_buffer);
 }
