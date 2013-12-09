@@ -57,7 +57,7 @@ bool PacketEngine_setFilter(PacketEngine& self, std::string filter_exp) {
 void PacketEngine_startCapture(PacketEngine& self) {
     char error_buffer[PCAP_ERRBUF_SIZE] = { 0 };
 
-    self.startCapture(error_buffer, true);
+    self.startCapture(error_buffer, false);
     if (error_buffer[0])
         throw std::runtime_error(error_buffer);
 }
@@ -65,12 +65,20 @@ void PacketEngine_startCapture(PacketEngine& self) {
 Packet PacketEngine_getNextPacket(PacketEngine& self) {
     char error_buffer[PCAP_ERRBUF_SIZE] = { 0 };
     Packet *pkt = self.getNextPacket(error_buffer);
-    std::cout << "Got Packet: " << *pkt << "\n";
     return *pkt;
 }
 
-void Packet_payload(Packet& self) {
+boost::python::list Packet_payload(Packet& self) {
     const u_char *payload = self.payload();
+    int payload_length = self.payload_length();
+
+    namespace python = boost::python;
+    python::list bytes;
+    for (int i = 0; i < payload_length; i++) {
+        bytes.append(python::str(payload[i]));
+        payload++;
+    }
+    return bytes;
 }
 
 // Define how to expose the Packet and PacketEngine attributes to Python.
@@ -87,7 +95,6 @@ BOOST_PYTHON_MODULE(pcap_ext) {
         .def("resetSession", &PacketEngine::resetSession)
         .def("isActive", &PacketEngine::isActive);
 
-    /*
     class_<Packet>("Packet", no_init)
         .def("length", &Packet::length)
         .def("timestamp", &Packet::timestamp)
@@ -101,6 +108,6 @@ BOOST_PYTHON_MODULE(pcap_ext) {
         .def("payloadLength", &Packet::payload_length)
         .def("sequenceNumber", &Packet::seq_number)
         .def("acknowledgementNumber", &Packet::ack_number)
-        .def("isValid", &Packet::is_valid);
-     */
+        .def("isValid", &Packet::is_valid)
+        .def(self_ns::str(self_ns::self));  // Special boost method for __str__ using overloaded <<
 }
