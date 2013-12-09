@@ -7,7 +7,7 @@
 import sys, os
 
 IMG_DIR = os.path.join(
-		os.path.dirname(os.path.abspath(__file__)), 'img/')
+       os.path.dirname(os.path.abspath(__file__)), 'img/')
 print IMG_DIR
 
 try:
@@ -25,7 +25,7 @@ import tkMessageBox
 import pcap_ext
 
 def image_path(imgFile):
-	return os.path.join(IMG_DIR, imgFile)
+    return os.path.join(IMG_DIR, imgFile)
 
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
@@ -204,7 +204,14 @@ class PacketWarrior(Frame):
                 background="systemWindowBody",
                 command=self.stop_capture,
                 foreground="#000000",
-                label="stop_capture")
+                label="Stop Capture")
+        self.capture.add_command(
+                activebackground="systemWindowBody",
+                activeforeground="#000000",
+                background="systemWindowBody",
+                command=self.reset_session,
+                foreground="#000000",
+                label="Reset Session")
     
 
         # Toolbar set up
@@ -317,25 +324,27 @@ class PacketWarrior(Frame):
     def update_filter(self, other):
         filterString = self.filterBox.box_value.get()
         filterString =  filterString.translate(None, '\'')
-        self.pktEngine.setFilter(filterString)
+        result = self.pktEngine.setFilter(filterString)
+        if result is False:
+            tkMessageBox.showinfo("Filter", "%s has been set as a filter." % filterString)
 
     def start_capture(self):
         result = self.pktEngine.startCapture()
         self.capture_packet()
 
     def capture_packet(self):
-        self.stop_capture = 0
+        self.end_capture = 0
         self.packetList.append(self.pktEngine.getNextPacket())
         self.after(1, self.capture_more)
 
     def capture_more(self):
-        if self.stop_capture:
+        if self.end_capture:
             return
         self.packetList.append(self.pktEngine.getNextPacket())
         self.after(1, self.capture_more)
 
     def stop_capture(self):
-        self.stop_capture = 1
+        self.end_capture = 1
         self.pktEngine.endCapture()
 
     def reset_session(self):
