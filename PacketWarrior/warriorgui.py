@@ -259,7 +259,6 @@ class PacketWarrior(Frame):
 
     def show_packet_list(self):
         self.buildList()
-        '''
         platform = sys.platform
         if platform == "darwin":
             os.system("open -a TextEdit %s" % self.packetfile) 
@@ -267,7 +266,6 @@ class PacketWarrior(Frame):
             os.system("gedit %s" % self.packetfile)
         elif platform == 'win32':
             os.system("notepad %s" % self.packetfile)
-        '''
 
     def about(self):
         tkMessageBox.showinfo("About PacketWarrior", "PacketWarrior\n\nVersion 0.1\n\nCopyright 2013\nDrew Rodman and Jonathan Loy")        
@@ -359,7 +357,11 @@ class PacketWarrior(Frame):
         self.save_file()
 
     def buildList(self):
-        self.packetListBox = boxes.PacketListBox(self, self.packetList)
+        w = open(self.packetfile, "w")
+        for val in self.packetList:
+            val = str(val)
+            w.write(val)
+            w.write('\n')
 
     
         
