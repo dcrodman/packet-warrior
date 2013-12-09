@@ -111,7 +111,7 @@ void PacketEngine::callbackHandler(
 // use_callback parameter should only be used if the caller wishes for pcap_loop
 // to occupy the main thread of execution. Otherwise packets will only be retrieved
 // from the handle during calls to getNextPacket().
-bool PacketEngine::startCapture(char *error_buf) {
+bool PacketEngine::startCapture(char *error_buf, bool use_callback) {
     if (!createHandle(error_buf))
         return false;
 
@@ -132,12 +132,12 @@ bool PacketEngine::startCapture(char *error_buf) {
     // Note: Defaulting to setting the sniffer to promiscuous mode, should probably
     // provide a way to turn that off at some point.
 
-    /*
-    if (pcap_loop(this->handle, -1, auxilaryHandler, (u_char*) this) == -1) {
-        strcpy(error_buf, pcap_geterr(this->handle));
-        return false;
+    if (use_callback) {
+        if (pcap_loop(this->handle, -1, auxilaryHandler, (u_char*) this) == -1) {
+            strcpy(error_buf, pcap_geterr(this->handle));
+            return false;
+        }
     }
-     */
     this->is_active = true;
     return true;
 }
@@ -171,23 +171,28 @@ Packet* PacketEngine::getNextPacket(char *error_buf) {
         return NULL;
     }
 
-    struct pcap_pkthdr *header;
-    const u_char *packet_data;
-    int result = 0;
-    do {
-        result = pcap_next_ex(this->handle, &header, &packet_data);
-        if (result == -1)
-            strcpy(error_buf, pcap_geterr(this->handle));
-        if (result > 0) {
-            Packet* pkt = new Packet(header, packet_data);
-
-            if (pkt->is_valid())
-                return pkt;
-            else
-                // Loop until we get a valid one.
-                result = 0;
-        }
-    } while (result == 0);
+    if (packetQueue.size() > 0)
+        return &packetQueue.front();
+    else {
+        struct pcap_pkthdr *header;
+        const u_char *packet_data;
+        int result = 0;
+        do {
+            result = pcap_next_ex(this->handle, &header, &packet_data);
+            if (result == -1)
+                strcpy(error_buf, pcap_geterr(this->handle));
+            if (result > 0) {
+                Packet* pkt = new Packet(header, packet_data);
+                std::cout << "Pkt Len: " << pkt->payload_length() << "\n";
+                std::cout << "Pkt Valid: " << pkt->is_valid() << "\n";
+                if (pkt->is_valid())
+                    return pkt;
+                else
+                    // Loop until we get a valid one.
+                    result = 0;
+            }
+        } while (result == 0);
+    }
 
     return NULL;
 }

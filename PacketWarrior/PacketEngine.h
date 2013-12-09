@@ -25,7 +25,7 @@ public:
     int getNumDevices();
     bool selectDevice(const char* dev, char *error_buf);
     bool setFilter(const char *filter, char *error_buf);
-    bool startCapture(char *error_buf);
+    bool startCapture(char *error_buf, bool use_callback);
     void endCapture();
     void resetSession();
 
@@ -53,6 +53,8 @@ private:
     struct bpf_program filter_p;
     // Whether or not the session is running.
     bool is_active;
+    
+    std::queue<Packet> packetQueue;
 };
 
 void auxilaryHandler(u_char *user, const struct pcap_pkthdr* pkthdr, const u_char* packet);
