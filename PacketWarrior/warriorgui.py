@@ -298,14 +298,10 @@ class PacketWarrior(Frame):
         deviceString = self.deviceBox.box_value.get()
         deviceString = deviceString.translate(None, '\'')
         deviceString = str(deviceString)
+        result = self.pktEngine.selectDevice(deviceString)   
+        if result is None:
+            tkMessageBox.showinfo("Device", "%s has been set as the selected device." % deviceString)
 
-        self.pktEngine.selectDevice(deviceString)
-        net = self.pktEngine.getNetAddress()
-        mask = self.pktEngine.getNetMask()
-        #self.deviceBox.quit()
-        tkMessageBox.showinfo(
-            "Device Set",
-            "Set to capture on %s: net=%s, mask=%s" % (deviceString, net, mask))
 
     def set_filters(self):
         self.filterBox = boxes.FilterBox(self)
@@ -319,32 +315,31 @@ class PacketWarrior(Frame):
     def start_capture(self):
         result = self.pktEngine.startCapture()
         self.capture_packet()
-        self.thread = pehelper(self.pktEngine)
 
     def capture_packet(self):
         self.stop_capture = 0
-        packetList.append(self.thread.run())
+        self.packetList.append(self.pktEngine.getNextPacket())
         self.after(1, self.capture_more)
 
     def capture_more(self):
         if self.stop_capture:
             return
-        packetList.append(self.thread.run())
+        self.packetList.append(self.pktEngine.getNextPacket())
         self.after(1, self.capture_more)
 
     def stop_capture(self):
         self.stop_capture = 1
-        self.pktEngine.stopCapture()
+        self.pktEngine.endCapture()
 
     def reset_session(self):
         self.pktEngine.resetSession()
 
     def buildList(self):
-        import csv
-        w = csv.writer(open("output.csv", "w"))
-        for val in self.pList:
-            w.writerow(val)
-        print ('saveFile')
+        w = open(self.packetfile, "w")
+        for val in self.packetList:
+            val = str(val)
+            w.write(val)
+            w.write('\n')
 
     
         
