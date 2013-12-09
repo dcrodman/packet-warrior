@@ -5,7 +5,6 @@
 #    Nov. 28, 2013 06:55:56 PM
 # Icons from Open Icon Library 
 import sys, os
-import pcap_ext as packetengine
 
 try:
     from Tkinter import *
