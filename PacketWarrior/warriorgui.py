@@ -16,7 +16,7 @@ try:
 except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
-import boxes, tkMessageBox, packetengine
+import boxes, tkMessageBox, time
 import tkMessageBox
 
 def vp_start_gui():
@@ -135,13 +135,6 @@ class PacketWarrior(Frame):
                 activebackground="systemWindowBody",
                 activeforeground="#000000",
                 background="systemWindowBody",
-                command=self.save_file,
-                foreground="#000000",
-                label="Save")
-        self.file.add_command(
-                activebackground="systemWindowBody",
-                activeforeground="#000000",
-                background="systemWindowBody",
                 command=self.save_file_as,
                 foreground="#000000",
                 label="Save As...")
@@ -159,14 +152,6 @@ class PacketWarrior(Frame):
                 background="systemWindowBody",
                 foreground="#000000",
                 label="View")
-        self.view.add_checkbutton(
-                variable=NewCheck,
-                activebackground="systemWindowBody",
-                activeforeground="#000000",
-                background="systemWindowBody",
-                command=self.TODO,
-                foreground="#000000",
-                label="Toolbar")
         self.view.add_command(
                 activebackground="systemWindowBody",
                 activeforeground="#000000",
@@ -174,14 +159,6 @@ class PacketWarrior(Frame):
                 command=self.show_packet_list,
                 foreground="#000000",
                 label="Packet List")
-        self.view.add_checkbutton(
-                variable=NewCheck,
-                activebackground="systemWindowBody",
-                activeforeground="#000000",
-                background="systemWindowBody",
-                command=self.TODO,
-                foreground="#000000",
-                label="Packet Details")
         self.capture = Menu(master,tearoff=0)
         self.menubar.add_cascade(menu=self.capture,
                 activebackground="systemWindowBody",
@@ -227,50 +204,42 @@ class PacketWarrior(Frame):
         self.OpenButton = Button(master, image=self._img1, command=self.open_file, border=0)
         self.OpenButton.grid(row=0, column=0)
 
-        self._img2 = PhotoImage(file="img/save.gif")
-        self.SaveButton = Button(master, image=self._img2, command=self.save_file, border=0)
-        self.SaveButton.grid(row=0, column=1)
+        self._img2 = PhotoImage(file="img/saveAS.gif")
+        self.AsButton = Button(master, image=self._img2, command=self.save_file_as, bd=-2)
+        self.AsButton.grid(row=0, column=1)
 
-        self._img3 = PhotoImage(file="img/saveAS.gif")
-        self.AsButton = Button(master, image=self._img3, command=self.save_file_as, bd=-2)
-        self.AsButton.grid(row=0, column=2)
+        self._img3 = PhotoImage(file="img/close.gif")
+        self.CloseButton = Button(master, image=self._img3, command=self.close_file, bd=-2)
+        self.CloseButton.grid(row=0, column=2)
 
-        self._img4 = PhotoImage(file="img/close.gif")
-        self.CloseButton = Button(master, image=self._img4, command=self.close_file, bd=-2)
-        self.CloseButton.grid(row=0, column=3)
+        self._img4 = PhotoImage(file="img/device.gif")
+        self.DeviceButton = Button(master, image=self._img4, command=self.get_devices, bd=-2)
+        self.DeviceButton.grid(row=0, column=3)
 
-        self._img5 = PhotoImage(file="img/device.gif")
-        self.DeviceButton = Button(master, image=self._img5, command=self.get_devices, bd=-2)
-        self.DeviceButton.grid(row=0, column=4)
+        self._img5 = PhotoImage(file="img/filter.gif")
+        self.FilterButton = Button(master, image=self._img5, command=self.set_filters, bd=-2)
+        self.FilterButton.grid(row=0, column=4)
 
-        self._img6 = PhotoImage(file="img/filter.gif")
-        self.FilterButton = Button(master, image=self._img6, command=self.set_filters, bd=-2)
-        self.FilterButton.grid(row=0, column=5)
+        self._img6 = PhotoImage(file="img/play.gif")
+        self.StartButton = Button(master, image=self._img6, command=self.start_capture, bd=-2)
+        self.StartButton.grid(row=0, column=5)
 
-        self._img7 = PhotoImage(file="img/play.gif")
-        self.StartButton = Button(master, image=self._img7, command=self.start_capture, bd=-2)
-        self.StartButton.grid(row=0, column=6)
+        self._img7 = PhotoImage(file="img/stop.gif")
+        self.StopButton = Button(master, image=self._img7, command=self.stop_capture, bd=-2)
+        self.StopButton.grid(row=0, column=6)
 
-        self._img8 = PhotoImage(file="img/stop.gif")
-        self.StopButton = Button(master, image=self._img8, command=self.stop_capture, bd=-2)
-        self.StopButton.grid(row=0, column=7)
+        self._img8 = PhotoImage(file="img/help.gif")
+        self.HelpButton = Button(master, image=self._img8, command=self.open_help, bd=-2)
+        self.HelpButton.grid(row=0, column=7)
 
-        self._img9 = PhotoImage(file="img/help.gif")
-        self.HelpButton = Button(master, image=self._img9, command=self.open_help, bd=-2)
-        self.HelpButton.grid(row=0, column=8)
-
-        self._img10 = PhotoImage(file="img/exit.gif")
-        self.ExitButton = Button(master, image=self._img10, command=self.exit_pw, bd=-2)
-        self.ExitButton.grid(row=0, column=9)
+        self._img9 = PhotoImage(file="img/exit.gif")
+        self.ExitButton = Button(master, image=self._img9, command=self.exit_pw, bd=-2)
+        self.ExitButton.grid(row=0, column=8)
 
         self.PktLstButton = Button(master, command=self.show_packet_list, bd=-2, text="PacketList")
-        self.PktLstButton.grid(row=0, column=10)
+        self.PktLstButton.grid(row=0, column=9)
 
         # End Toolbar
-
-    def TODO(self):
-        print ('TODO')
-        sys.stdout.flush()
 
     def show_packet_list(self):
         platform = sys.platform
@@ -291,44 +260,29 @@ class PacketWarrior(Frame):
         sys.exit()
 
     def open_file(self):
-        #tkMessageBox.showinfo("Open File", "The Open File functionality not yet implemented.")
         platform = sys.platform
         import tkFileDialog,csv
         inputfile = tkFileDialog.askopenfilename(parent=root,title='Choose a file')
-        if platform == "darwin":
-            command = "open -a TextEdit %s" % inputfile
-        elif platform == "linux":
-            command = "gedit %s" % inputfile
-        elif platform == 'win32':
-            command =  "notepad %s" % inputfile
-        os.system(command)
+        if inputfile:
+            if platform == "darwin":
+                command = "open -a TextEdit %s" % inputfile
+            elif platform == "linux":
+                command = "gedit %s" % inputfile
+            elif platform == 'win32':
+                command =  "notepad %s" % inputfile
+            os.system(command)
         
 
     def open_help(self):
         tkMessageBox.showinfo("Help", "The Help functionality not yet implemented.")
 
-    def save_file(self):
-        '''
-        import csv
-        if self.filename:
-            w = csv.writer(open(self.filename, "w"))
-            for key, val in self.data.items():
-                w.writerow([val])
-        else:
-            self.save_file_as()
-        '''
-
     def save_file_as(self):
         import tkFileDialog, shutil
-        fout = tkFileDialog.asksaveasfile(mode='w', defaultextension=".txt")
-        shutil.copyfile(self.packetfile, fout)
-        '''
-        self.filename = fout
-        w = csv.writer(fout)
-        for key, val in self.data.items():
-            w.writerow([val])
-        fout.close()
-        '''
+        fout = tkFileDialog.asksaveasfilename(defaultextension='.txt')
+        if fout:
+            if self.packetfile != fout:
+                shutil.copyfile(self.packetfile, fout)
+                self.packetfile = fout
 
     def get_devices(self):
         devices = self.pktEngine.get_available_devices()
@@ -352,15 +306,26 @@ class PacketWarrior(Frame):
         self.pktEngine.set_filter(filterString)
 
     def start_capture(self):
-        self.pktEngine.start_capture()
+        self.cap = self.pktEngine.start_capture()
+        self.thread = packetengine.DecoderThread(self.cap)
+        self.capture_packet()
+
+    def capture_packet(self):
+        self.thread.run()
+        self.stop_capture = 0
+        self.after(0, self.capture_more)
+
+    def capture_more(self):
+        if self.stop_capture:
+            return
+        self.thread.run()
+        self.after(1, self.capture_more)
 
     def stop_capture(self):
-        self.pktEngine.stop_capture()
+        self.stop_capture = 1
+
+    
         
 
 if __name__ == '__main__':
     vp_start_gui()
-
-
-
-
