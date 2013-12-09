@@ -21,7 +21,7 @@ class FilterBox(tk.Toplevel):
         filterLabel.grid(column=0, row=0)
     	self.box_value = StringVar()
         self.box = ttk.Combobox(top, textvariable=self.box_value)
-        self.box['values'] = ('tcp', 'udp', 'imcp', 'host \'host\'', 'src host \'host\'', 
+        self.box['values'] = ('ip proto \\tcp', 'ip proto \\udp', 'ip proto \\imcp', 'host \'host\'', 'src host \'host\'', 
             'dst host \'host\'','gateway \'host\'', 'dst net \'net\'', 'src net \'net\'', 
             'net \'net\'', 'dst port \'port\'', 'src port \'port\'', 'port \'port\'', 
             'ip6 proto \'protocol\'','ip broadcast', 'ip multicast', 'ip6 multicast')
