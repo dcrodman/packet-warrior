@@ -30,7 +30,7 @@ for an example.
 In Jamroot.jam, edit the location of "use-project boost" to point to the top level
 BOOST_ROOT directory. Additionally, make sure that the line under "project" in
 "requirements" that reads:
-	
+
 	<library>/usr/lib/libpcap.dylib</library>
 
 is directed to your system's "libpcap.dylib" include. On OS X, you should not have to
@@ -48,7 +48,7 @@ To run the test for the module, execute:
 To run the GUI itself, enter:
 
 	mv pcap_ext.so PacketWarrior
-	sudo python PacketWarrior/packetwarrior.py
+	sudo python PacketWarrior/warriorgui.py
 
 ==============================
 Resources
