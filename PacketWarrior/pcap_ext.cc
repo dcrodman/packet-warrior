@@ -44,6 +44,15 @@ void PacketEgnine_selectDevice(PacketEngine& self, std::string dev) {
         throw std::runtime_error(error_buffer);
 }
 
+boost::python::str PacketEngine_getNetAddress(PacketEngine& self) {
+    const char *net_info = self.getNetAddress();
+    return boost::python::str(net_info, strlen(net_info));
+}
+
+boost::python::str PacketEngine_getNetMask(PacketEngine& self) {
+    const char *net_mask = self.getNetMask();
+    return boost::python::str(net_mask, strlen(net_mask));
+}
 
 bool PacketEngine_setFilter(PacketEngine& self, std::string filter_exp) {
     char error_buffer[PCAP_ERRBUF_SIZE] = { 0 };
@@ -88,6 +97,8 @@ BOOST_PYTHON_MODULE(pcap_ext) {
     class_<PacketEngine>("PacketEngine")
         .def("getAvailableDevices", &PacketEngine_getAvailableDevices)
         .def("selectDevice", &PacketEgnine_selectDevice)
+        .def("getNetAddress", &PacketEngine_getNetAddress)
+        .def("getNetMask", &PacketEngine_getNetMask)
         .def("setFilter", &PacketEngine_setFilter)
         .def("startCapture", &PacketEngine_startCapture)
         .def("getNextPacket", &PacketEngine_getNextPacket)

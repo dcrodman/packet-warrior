@@ -24,6 +24,9 @@ public:
     const char** getAvailableDevices(char *error_buf);
     int getNumDevices();
     bool selectDevice(const char* dev, char *error_buf);
+    char* getNetAddress();
+    char* getNetMask();
+
     bool setFilter(const char *filter, char *error_buf);
     bool startCapture(char *error_buf, bool use_callback);
     void endCapture();

@@ -75,6 +75,18 @@ bool PacketEngine::selectDevice(const char* dev, char *error_buf) {
     return false;
 }
 
+char* PacketEngine::getNetAddress() {
+    struct in_addr ip_addr;
+    ip_addr.s_addr = net_info;
+    return inet_ntoa(ip_addr);
+}
+
+char* PacketEngine::getNetMask() {
+    struct in_addr ip_addr;
+    ip_addr.s_addr = net_mask;
+    return inet_ntoa(ip_addr);
+}
+
 // Create a handle for the network device to set filters/intiate sniffing.
 bool PacketEngine::createHandle(char *error_buf) {
     if (this->handle == nullptr) {
