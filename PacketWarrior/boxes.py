@@ -15,13 +15,14 @@ class FilterBox(tk.Toplevel):
 
     def combo(self):
     	top = tk.Toplevel()
-    	top.geometry('320x100+319+252')
+    	top.geometry('320x150+319+252')
     	filterLabel = tk.Label(top, text='Select a filter using the up/down arrowhead keys' \
-            '\nor keyboard up/down arrow keys.\n Replace the value in quotes.')
+            '\nor keyboard up/down arrow keys.\n Note: Replace the value in quotes.' \
+            '\nNote: Add double backslashes (\\\\) \nin front of tcp, udp, and imcp.')
         filterLabel.grid(column=0, row=0)
     	self.box_value = StringVar()
         self.box = ttk.Combobox(top, textvariable=self.box_value)
-        self.box['values'] = ('ip proto \\\\tcp', 'ip proto \\\\udp', 'ip proto \\\\imcp', 'host \'host\'', 'src host \'host\'', 
+        self.box['values'] = ('ip proto tcp', 'ip proto udp', 'ip proto imcp', 'host \'host\'', 'src host \'host\'', 
             'dst host \'host\'','gateway \'host\'', 'dst net \'net\'', 'src net \'net\'', 
             'net \'net\'', 'dst port \'port\'', 'src port \'port\'', 'port \'port\'', 
             'ip6 proto \'protocol\'','ip broadcast', 'ip multicast', 'ip6 multicast')
@@ -36,8 +37,8 @@ class DeviceBox(tk.Toplevel):
     def combo(self, devices):
         top = tk.Toplevel()
         top.geometry('320x100+319+132')
-        filterLabel = tk.Label(top, text='Select a filter using the up/down arrowhead keys' \
-            '\nor keyboard up/down arrow keys.\n Replace the value in quotes.')
+        filterLabel = tk.Label(top, text='Select a device using the up/down arrowhead keys' \
+            '\nor keyboard up/down arrow keys.')
         filterLabel.grid(column=0, row=0)
         self.box_value = StringVar()
         self.box = ttk.Combobox(top, textvariable=self.box_value)
