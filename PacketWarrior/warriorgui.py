@@ -17,7 +17,7 @@ except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
 import boxes, tkMessageBox, time
-import tkMessageBox, pehelper
+import tkMessageBox
 import pcap_ext
 
 def vp_start_gui():
