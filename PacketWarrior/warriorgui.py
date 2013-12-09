@@ -6,6 +6,10 @@
 # Icons from Open Icon Library 
 import sys, os
 
+IMG_DIR = os.path.join(
+		os.path.dirname(os.path.abspath(__file__)), 'img/')
+print IMG_DIR
+
 try:
     from Tkinter import *
 except ImportError:
@@ -19,6 +23,9 @@ except ImportError:
 import boxes, tkMessageBox, time
 import tkMessageBox
 import pcap_ext
+
+def image_path(imgFile):
+	return os.path.join(IMG_DIR, imgFile)
 
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
@@ -202,39 +209,39 @@ class PacketWarrior(Frame):
 
         # Toolbar set up
 
-        self._img1 = PhotoImage(file="img/open.gif")
+        self._img1 = PhotoImage(file=image_path("open.gif"))
         self.OpenButton = Button(master, image=self._img1, command=self.open_file, border=0)
         self.OpenButton.grid(row=0, column=0)
 
-        self._img2 = PhotoImage(file="img/saveAS.gif")
+        self._img2 = PhotoImage(file=image_path("saveAS.gif"))
         self.AsButton = Button(master, image=self._img2, command=self.save_file_as, bd=-2)
         self.AsButton.grid(row=0, column=1)
 
-        self._img3 = PhotoImage(file="img/close.gif")
+        self._img3 = PhotoImage(file=image_path("close.gif"))
         self.CloseButton = Button(master, image=self._img3, command=self.close_file, bd=-2)
         self.CloseButton.grid(row=0, column=2)
 
-        self._img4 = PhotoImage(file="img/device.gif")
+        self._img4 = PhotoImage(file=image_path("device.gif"))
         self.DeviceButton = Button(master, image=self._img4, command=self.get_devices, bd=-2)
         self.DeviceButton.grid(row=0, column=3)
 
-        self._img5 = PhotoImage(file="img/filter.gif")
+        self._img5 = PhotoImage(file=image_path("filter.gif"))
         self.FilterButton = Button(master, image=self._img5, command=self.set_filters, bd=-2)
         self.FilterButton.grid(row=0, column=4)
 
-        self._img6 = PhotoImage(file="img/play.gif")
+        self._img6 = PhotoImage(file=image_path("play.gif"))
         self.StartButton = Button(master, image=self._img6, command=self.start_capture, bd=-2)
         self.StartButton.grid(row=0, column=5)
 
-        self._img7 = PhotoImage(file="img/stop.gif")
+        self._img7 = PhotoImage(file=image_path("stop.gif"))
         self.StopButton = Button(master, image=self._img7, command=self.stop_capture, bd=-2)
         self.StopButton.grid(row=0, column=6)
 
-        self._img8 = PhotoImage(file="img/help.gif")
+        self._img8 = PhotoImage(file=image_path("help.gif"))
         self.HelpButton = Button(master, image=self._img8, command=self.open_help, bd=-2)
         self.HelpButton.grid(row=0, column=7)
 
-        self._img9 = PhotoImage(file="img/exit.gif")
+        self._img9 = PhotoImage(file=image_path("exit.gif"))
         self.ExitButton = Button(master, image=self._img9, command=self.exit_pw, bd=-2)
         self.ExitButton.grid(row=0, column=8)
 
