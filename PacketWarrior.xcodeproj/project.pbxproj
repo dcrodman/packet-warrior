@@ -37,6 +37,7 @@
 		408D0EED1843EF26006E13C6 /* PacketEngine.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketEngine.cc; sourceTree = "<group>"; };
 		408D0EEE1843EF26006E13C6 /* PacketEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketEngine.h; sourceTree = "<group>"; };
 		408D0EF01843EF85006E13C6 /* Packet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Packet.h; sourceTree = "<group>"; };
+		40906041186394E3006D2C9E /* packet_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = packet_types.h; sourceTree = "<group>"; };
 		409A372C18442D1B00E7B7E8 /* libpcap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcap.dylib; path = usr/lib/libpcap.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -74,6 +75,7 @@
 			children = (
 				408C0CBA185135D900CDB2F7 /* sniffex.h */,
 				408C0CBD185137EF00CDB2F7 /* sniffex.cc */,
+				40906041186394E3006D2C9E /* packet_types.h */,
 				408D0EF01843EF85006E13C6 /* Packet.h */,
 				408138E9184FA3E100AD8740 /* Packet.cc */,
 				408D0EEE1843EF26006E13C6 /* PacketEngine.h */,

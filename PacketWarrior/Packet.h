@@ -17,6 +17,7 @@
 
 #include "pcap.h"
 #include "sniffex.h"
+#include "packet_types.h"
 
 using namespace std;
 

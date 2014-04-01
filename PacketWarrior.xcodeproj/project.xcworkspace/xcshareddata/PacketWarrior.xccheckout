@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>E91EBBAC-2529-49B8-9B8A-E6C318919845</string>
+	<string>AA972F21-E8C5-4F42-B39F-15F57E7A27BA</string>
 	<key>IDESourceControlProjectName</key>
 	<string>PacketWarrior</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>39B0636D-1E72-40F5-AB4F-F582B65F6D5F</key>
-		<string>https://bitbucket.org/drodman/packet-warrior.git</string>
+		<key>A7B2AD30-037B-47C1-991D-DB8B4066A295</key>
+		<string>ssh://github.com/dcrodman/packet-warrior.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>PacketWarrior.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>39B0636D-1E72-40F5-AB4F-F582B65F6D5F</key>
+		<key>A7B2AD30-037B-47C1-991D-DB8B4066A295</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://bitbucket.org/drodman/packet-warrior.git</string>
+	<string>ssh://github.com/dcrodman/packet-warrior.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>39B0636D-1E72-40F5-AB4F-F582B65F6D5F</string>
+	<string>A7B2AD30-037B-47C1-991D-DB8B4066A295</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>39B0636D-1E72-40F5-AB4F-F582B65F6D5F</string>
+			<string>A7B2AD30-037B-47C1-991D-DB8B4066A295</string>
 			<key>IDESourceControlWCCName</key>
-			<string>PacketWarrior</string>
+			<string>packet-warrior</string>
 		</dict>
 	</array>
 </dict>
